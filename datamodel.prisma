@@ -1,13 +1,11 @@
 type User {
   id: ID! @unique
-  email: String @unique
   name: String!
-  posts: [Post!]!
+  courses: [Course!]!
 }
 
-type Post {
+type Course {
   id: ID! @unique
   title: String!
-  published: Boolean! @default(value: "false")
-  author: User
+  owner: User!
 }

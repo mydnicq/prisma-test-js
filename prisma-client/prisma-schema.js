@@ -1,5 +1,5 @@
 module.exports = {
-        typeDefs: /* GraphQL */ `type AggregatePost {
+        typeDefs: /* GraphQL */ `type AggregateCourse {
   count: Int!
 }
 
@@ -11,143 +11,105 @@ type BatchPayload {
   count: Long!
 }
 
-scalar Long
-
-type Mutation {
-  createPost(data: PostCreateInput!): Post!
-  updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
-  updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
-  upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
-  deletePost(where: PostWhereUniqueInput!): Post
-  deleteManyPosts(where: PostWhereInput): BatchPayload!
-  createUser(data: UserCreateInput!): User!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  deleteUser(where: UserWhereUniqueInput!): User
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
-}
-
-enum MutationType {
-  CREATED
-  UPDATED
-  DELETED
-}
-
-interface Node {
-  id: ID!
-}
-
-type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
-}
-
-type Post {
+type Course {
   id: ID!
   title: String!
-  published: Boolean!
-  author: User
+  owner: User!
 }
 
-type PostConnection {
+type CourseConnection {
   pageInfo: PageInfo!
-  edges: [PostEdge]!
-  aggregate: AggregatePost!
+  edges: [CourseEdge]!
+  aggregate: AggregateCourse!
 }
 
-input PostCreateInput {
+input CourseCreateInput {
   title: String!
-  published: Boolean
-  author: UserCreateOneWithoutPostsInput
+  owner: UserCreateOneWithoutCoursesInput!
 }
 
-input PostCreateManyWithoutAuthorInput {
-  create: [PostCreateWithoutAuthorInput!]
-  connect: [PostWhereUniqueInput!]
+input CourseCreateManyWithoutOwnerInput {
+  create: [CourseCreateWithoutOwnerInput!]
+  connect: [CourseWhereUniqueInput!]
 }
 
-input PostCreateWithoutAuthorInput {
+input CourseCreateWithoutOwnerInput {
   title: String!
-  published: Boolean
 }
 
-type PostEdge {
-  node: Post!
+type CourseEdge {
+  node: Course!
   cursor: String!
 }
 
-enum PostOrderByInput {
+enum CourseOrderByInput {
   id_ASC
   id_DESC
   title_ASC
   title_DESC
-  published_ASC
-  published_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
-type PostPreviousValues {
+type CoursePreviousValues {
   id: ID!
   title: String!
-  published: Boolean!
 }
 
-type PostSubscriptionPayload {
+type CourseSubscriptionPayload {
   mutation: MutationType!
-  node: Post
+  node: Course
   updatedFields: [String!]
-  previousValues: PostPreviousValues
+  previousValues: CoursePreviousValues
 }
 
-input PostSubscriptionWhereInput {
+input CourseSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: PostWhereInput
-  AND: [PostSubscriptionWhereInput!]
-  OR: [PostSubscriptionWhereInput!]
-  NOT: [PostSubscriptionWhereInput!]
+  node: CourseWhereInput
+  AND: [CourseSubscriptionWhereInput!]
+  OR: [CourseSubscriptionWhereInput!]
+  NOT: [CourseSubscriptionWhereInput!]
 }
 
-input PostUpdateInput {
+input CourseUpdateInput {
   title: String
-  published: Boolean
-  author: UserUpdateOneWithoutPostsInput
+  owner: UserUpdateOneRequiredWithoutCoursesInput
 }
 
-input PostUpdateManyWithoutAuthorInput {
-  create: [PostCreateWithoutAuthorInput!]
-  delete: [PostWhereUniqueInput!]
-  connect: [PostWhereUniqueInput!]
-  disconnect: [PostWhereUniqueInput!]
-  update: [PostUpdateWithWhereUniqueWithoutAuthorInput!]
-  upsert: [PostUpsertWithWhereUniqueWithoutAuthorInput!]
-}
-
-input PostUpdateWithoutAuthorDataInput {
+input CourseUpdateManyMutationInput {
   title: String
-  published: Boolean
 }
 
-input PostUpdateWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput!
-  data: PostUpdateWithoutAuthorDataInput!
+input CourseUpdateManyWithoutOwnerInput {
+  create: [CourseCreateWithoutOwnerInput!]
+  delete: [CourseWhereUniqueInput!]
+  connect: [CourseWhereUniqueInput!]
+  disconnect: [CourseWhereUniqueInput!]
+  update: [CourseUpdateWithWhereUniqueWithoutOwnerInput!]
+  upsert: [CourseUpsertWithWhereUniqueWithoutOwnerInput!]
 }
 
-input PostUpsertWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput!
-  update: PostUpdateWithoutAuthorDataInput!
-  create: PostCreateWithoutAuthorInput!
+input CourseUpdateWithoutOwnerDataInput {
+  title: String
 }
 
-input PostWhereInput {
+input CourseUpdateWithWhereUniqueWithoutOwnerInput {
+  where: CourseWhereUniqueInput!
+  data: CourseUpdateWithoutOwnerDataInput!
+}
+
+input CourseUpsertWithWhereUniqueWithoutOwnerInput {
+  where: CourseWhereUniqueInput!
+  update: CourseUpdateWithoutOwnerDataInput!
+  create: CourseCreateWithoutOwnerInput!
+}
+
+input CourseWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -176,22 +138,54 @@ input PostWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
-  published: Boolean
-  published_not: Boolean
-  author: UserWhereInput
-  AND: [PostWhereInput!]
-  OR: [PostWhereInput!]
-  NOT: [PostWhereInput!]
+  owner: UserWhereInput
+  AND: [CourseWhereInput!]
+  OR: [CourseWhereInput!]
+  NOT: [CourseWhereInput!]
 }
 
-input PostWhereUniqueInput {
+input CourseWhereUniqueInput {
   id: ID
 }
 
+scalar Long
+
+type Mutation {
+  createCourse(data: CourseCreateInput!): Course!
+  updateCourse(data: CourseUpdateInput!, where: CourseWhereUniqueInput!): Course
+  updateManyCourses(data: CourseUpdateManyMutationInput!, where: CourseWhereInput): BatchPayload!
+  upsertCourse(where: CourseWhereUniqueInput!, create: CourseCreateInput!, update: CourseUpdateInput!): Course!
+  deleteCourse(where: CourseWhereUniqueInput!): Course
+  deleteManyCourses(where: CourseWhereInput): BatchPayload!
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
 type Query {
-  post(where: PostWhereUniqueInput!): Post
-  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
-  postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  course(where: CourseWhereUniqueInput!): Course
+  courses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course]!
+  coursesConnection(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourseConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -199,15 +193,14 @@ type Query {
 }
 
 type Subscription {
-  post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  course(where: CourseSubscriptionWhereInput): CourseSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type User {
   id: ID!
-  email: String
   name: String!
-  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
+  courses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
 }
 
 type UserConnection {
@@ -217,18 +210,16 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  email: String
   name: String!
-  posts: PostCreateManyWithoutAuthorInput
+  courses: CourseCreateManyWithoutOwnerInput
 }
 
-input UserCreateOneWithoutPostsInput {
-  create: UserCreateWithoutPostsInput
+input UserCreateOneWithoutCoursesInput {
+  create: UserCreateWithoutCoursesInput
   connect: UserWhereUniqueInput
 }
 
-input UserCreateWithoutPostsInput {
-  email: String
+input UserCreateWithoutCoursesInput {
   name: String!
 }
 
@@ -240,8 +231,6 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
-  email_ASC
-  email_DESC
   name_ASC
   name_DESC
   createdAt_ASC
@@ -252,7 +241,6 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
-  email: String
   name: String!
 }
 
@@ -275,28 +263,28 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  email: String
   name: String
-  posts: PostUpdateManyWithoutAuthorInput
+  courses: CourseUpdateManyWithoutOwnerInput
 }
 
-input UserUpdateOneWithoutPostsInput {
-  create: UserCreateWithoutPostsInput
-  update: UserUpdateWithoutPostsDataInput
-  upsert: UserUpsertWithoutPostsInput
-  delete: Boolean
-  disconnect: Boolean
+input UserUpdateManyMutationInput {
+  name: String
+}
+
+input UserUpdateOneRequiredWithoutCoursesInput {
+  create: UserCreateWithoutCoursesInput
+  update: UserUpdateWithoutCoursesDataInput
+  upsert: UserUpsertWithoutCoursesInput
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateWithoutPostsDataInput {
-  email: String
+input UserUpdateWithoutCoursesDataInput {
   name: String
 }
 
-input UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput!
-  create: UserCreateWithoutPostsInput!
+input UserUpsertWithoutCoursesInput {
+  update: UserUpdateWithoutCoursesDataInput!
+  create: UserCreateWithoutCoursesInput!
 }
 
 input UserWhereInput {
@@ -314,20 +302,6 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  email: String
-  email_not: String
-  email_in: [String!]
-  email_not_in: [String!]
-  email_lt: String
-  email_lte: String
-  email_gt: String
-  email_gte: String
-  email_contains: String
-  email_not_contains: String
-  email_starts_with: String
-  email_not_starts_with: String
-  email_ends_with: String
-  email_not_ends_with: String
   name: String
   name_not: String
   name_in: [String!]
@@ -342,9 +316,9 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  posts_every: PostWhereInput
-  posts_some: PostWhereInput
-  posts_none: PostWhereInput
+  courses_every: CourseWhereInput
+  courses_some: CourseWhereInput
+  courses_none: CourseWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -352,7 +326,6 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
-  email: String
 }
 `
       }
